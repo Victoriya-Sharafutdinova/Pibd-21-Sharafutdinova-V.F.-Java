@@ -1,11 +1,10 @@
-package lab1;
+package lab2;
 
 import java.awt.Graphics;
-
 import javax.swing.JPanel;
 
-public class PanelShip extends JPanel {
-	public static Ship ship;
+public class PanelShip extends JPanel{
+	public static ITransport ship;
 	public static boolean initialization = false;
 	
 	@Override 
@@ -15,6 +14,6 @@ public class PanelShip extends JPanel {
 			ship.DrawShip(g);
 		}
 	}
-
-
+	
+	
 }
