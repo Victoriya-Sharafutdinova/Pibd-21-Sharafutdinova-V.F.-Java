@@ -1,9 +1,8 @@
-package lab1;
+package lab2;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
@@ -12,8 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
 
 public class FormShip {
 
@@ -44,7 +41,6 @@ public class FormShip {
 	/**
 	 * Create the application.
 	 */
-
 	public FormShip() {
 		initialize();
 	}
@@ -58,7 +54,7 @@ public class FormShip {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		panel = new PanelShip();
-		panel.setBounds(12, 13, 864, 439);
+		panel.setBounds(10, 11, 864, 439);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		buttonRight = new JButton("");
@@ -113,9 +109,9 @@ public class FormShip {
 				RedrawUI();
 			}
 		});
-		buttonCreate = new JButton("Создать");
-		buttonCreate.setBounds(0, 0, 81, 25);
-		panel.add(buttonCreate);
+		buttonCreate = new JButton("Создать корабль-контейнеровоз");
+		buttonCreate.setBounds(0, 0, 253, 25);
+		panel.add(buttonCreate);		
 		buttonCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Random rnd = new Random();
@@ -125,6 +121,18 @@ public class FormShip {
 				RedrawUI();
 			}
 		});
+		JButton button = new JButton("Создать корабль");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Random rnd = new Random();
+				PanelShip.ship = new SimpleShip(rnd.nextInt(200) + 100, rnd.nextInt(1000) + 1000, Color.BLUE);
+				PanelShip.initialization = true;
+				PanelShip.ship.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90) + 10, panel.getWidth(), panel.getHeight());
+				RedrawUI();
+			}
+		});
+		button.setBounds(301, 0, 253, 25);
+		panel.add(button);
 	}
 
 	private void RedrawUI() {
