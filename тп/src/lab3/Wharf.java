@@ -66,20 +66,18 @@ import java.util.ArrayList;
         }
     }
     private void DrawMarking(Graphics g)
-    {
-		Color newColor3 = new Color(0, 0, 0);
-		g.setColor(newColor3);
-        //границы праковки             
+	{
+	Color newColor3 = new Color(0, 0, 0);
+	g.setColor(newColor3);         
         g.drawRect(0, 0, (_places.size() / 5) * _placeSizeWidth, 480);
         for (int i = 0; i < _places.size() / 5; i++)
-        {//отрисовываем, по 5 мест на линии   
+        {
             for (int j = 0; j < 6; ++j)
-            {//линия рамзетки места     
+            {
                 g.drawRect(i * _placeSizeWidth, j * _placeSizeHeight, 110, 5 );
                 Color nc = new Color(200,200,200);
-        		g.setColor(nc);
+        	g.setColor(nc);
                 g.fillRect(i * _placeSizeWidth, j * _placeSizeHeight, 110, 5);
-                //g.DrawLine(pen, i * _placeSizeWidth, j * _placeSizeHeight, i * _placeSizeWidth + 110, j * _placeSizeHeight);
             }
     		g.setColor(newColor3);
             g.drawLine( i * _placeSizeWidth, 0, i * _placeSizeWidth, 400);
