@@ -16,13 +16,11 @@ public class PanelWharf extends JPanel{
 	    	wharf = new Wharf<>(20, 615, 603);
 	    }
 
-	
 	@Override 
 	public void paint(Graphics g) { 
 		super.paint(g); 
 			if(wharf != null) {
 				wharf.Draw(g);
 			}
-		
 	}
 }
