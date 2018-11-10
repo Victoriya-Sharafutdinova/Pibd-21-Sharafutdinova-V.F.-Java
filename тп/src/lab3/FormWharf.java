@@ -81,7 +81,6 @@ public class FormWharf {
 				SimpleShip ship = new SimpleShip(100, 1000, mainColor);
 				int place = wharf.Plus(ship);
 				PanelShip.initialization = true;
-				//RedrawUI();
 				panelWharf.repaint();
 			}
 		});
@@ -93,14 +92,10 @@ public class FormWharf {
 			public void actionPerformed(ActionEvent e) {
 				Color mainColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
 				Color dopColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
-
 				Ship ship = new Ship(100, 1000, mainColor, dopColor);
-                int place = wharf.Plus(ship);
-				PanelShip.initialization = true;
-               // Draw();
-				RedrawUI();
+               			int place = wharf.Plus(ship);
+				PanelShip.initialization = trueж     
 				panelWharf.repaint();
-
 			}
 		});
 		buttonSetShip.setBounds(790, 104, 118, 78);
@@ -132,16 +127,16 @@ public class FormWharf {
 		buttonTakeShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!maskedTextBox1.getText().equals("")) {
-                    ITransport ship = wharf.Minus(Integer.parseInt(maskedTextBox1.getText()));
-                    if (ship != null) {
-                        ship.SetPosition(5, 5, pictureBoxTakeShip.getWidth(), pictureBoxTakeShip.getHeight());
-                        pictureBoxTakeShip.setShip(ship);
-                        pictureBoxTakeShip.repaint();
-                        panelWharf.repaint();
-                    } else {
-                    	pictureBoxTakeShip.setShip(null);
-                    	pictureBoxTakeShip.repaint();
-                    }
+					ITransport ship = wharf.Minus(Integer.parseInt(maskedTextBox1.getText()));
+					if (ship != null) {
+						ship.SetPosition(5, 5, pictureBoxTakeShip.getWidth(), pictureBoxTakeShip.getHeight());
+						pictureBoxTakeShip.setShip(ship);
+						pictureBoxTakeShip.repaint();
+						panelWharf.repaint();
+					} else {
+						pictureBoxTakeShip.setShip(null);
+						pictureBoxTakeShip.repaint();
+					}
 				}
 			}
 		});
