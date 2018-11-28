@@ -1,4 +1,4 @@
-package lab3;
+package lab4;
 
 public enum Direction {
 	Up, Down, Left, Right

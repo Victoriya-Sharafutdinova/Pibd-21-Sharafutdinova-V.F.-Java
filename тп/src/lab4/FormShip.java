@@ -1,4 +1,4 @@
-package lab3;
+package lab4;
 
 import java.awt.Color;
 import java.awt.EventQueue;
