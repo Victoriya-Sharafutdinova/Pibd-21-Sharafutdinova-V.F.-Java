@@ -1,4 +1,4 @@
-package lab3;
+﻿package lab3;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -27,12 +27,15 @@ public class FormWharf {
 
 	private JFrame frame;
 	private JPanel panel;
+	private JList listBoxLevels;
+   	private DefaultListModel model;
 	
 	
 	private JTextField maskedTextBox1;
-    Wharf<ITransport> wharf;
-    private PanelShip pictureBoxTakeShip;
-    private PanelWharf panelWharf;
+   	MultiLevelWharf wharf;
+	private int countLevel = 5;
+    	private PanelShip pictureBoxTakeShip;
+    	private PanelWharf panelWharf;
 	/**
 	 * Launch the application.
 	 */
@@ -79,9 +82,7 @@ public class FormWharf {
 			public void actionPerformed(ActionEvent arg0) {
 				Color mainColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
 				SimpleShip ship = new SimpleShip(100, 1000, mainColor);
-				int place = wharf.Plus(ship);
-				PanelShip.initialization = true;
-				//RedrawUI();
+				int place = wharf.getWharf(listBoxLevels.getSelectedIndex()).Plus(ship);
 				panelWharf.repaint();
 			}
 		});
@@ -93,14 +94,9 @@ public class FormWharf {
 			public void actionPerformed(ActionEvent e) {
 				Color mainColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
 				Color dopColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
-
 				Ship ship = new Ship(100, 1000, mainColor, dopColor);
-                int place = wharf.Plus(ship);
-				PanelShip.initialization = true;
-               // Draw();
-				RedrawUI();
+               			int place = wharf.getWharf(listBoxLevels.getSelectedIndex()).Plus(ship);					
 				panelWharf.repaint();
-
 			}
 		});
 		buttonSetShip.setBounds(790, 104, 118, 78);
@@ -132,22 +128,41 @@ public class FormWharf {
 		buttonTakeShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!maskedTextBox1.getText().equals("")) {
-                    ITransport ship = wharf.Minus(Integer.parseInt(maskedTextBox1.getText()));
-                    if (ship != null) {
-                        ship.SetPosition(5, 5, pictureBoxTakeShip.getWidth(), pictureBoxTakeShip.getHeight());
-                        pictureBoxTakeShip.setShip(ship);
-                        pictureBoxTakeShip.repaint();
-                        panelWharf.repaint();
-                    } else {
-                    	pictureBoxTakeShip.setShip(null);
-                    	pictureBoxTakeShip.repaint();
-                    }
+                   			ITransport ship = wharf.Minus(Integer.parseInt(maskedTextBox1.getText()));
+                    			if (ship != null) {
+                        			ship.SetPosition(5, 5, pictureBoxTakeShip.getWidth(), pictureBoxTakeShip.getHeight());
+                        			pictureBoxTakeShip.setShip(ship);
+                        			pictureBoxTakeShip.repaint();
+                        			panelWharf.repaint();
+                    			} else {
+                    				pictureBoxTakeShip.setShip(null);
+                    				pictureBoxTakeShip.repaint();
+                    			}
 				}
 			}
 		});
 		buttonTakeShip.setBounds(22, 64, 97, 25);
 		panel.add(buttonTakeShip);
 	}
+
+	listBoxLevels = new JList();
+		listBoxLevels.setBounds(790, 11, 118, 118);
+		frame.getContentPane().add(listBoxLevels);
+        model = new DefaultListModel();
+        for(int i = 0; i < countLevel; i++)
+        {
+        	model.addElement("Уровень " + (i + 1));
+        }
+        listBoxLevels.setModel(model);
+        listBoxLevels.setSelectedIndex(0);
+        panelWharf.setListLevels(listBoxLevels);   
+        listBoxLevels.addListSelectionListener(new ListSelectionListener() { 
+			@Override 
+			public void valueChanged(ListSelectionEvent e) { 
+				panelWharf.repaint(); 
+			} 
+		});
+
 	private void RedrawUI() {
 		panelWharf.updateUI();		
 	}
