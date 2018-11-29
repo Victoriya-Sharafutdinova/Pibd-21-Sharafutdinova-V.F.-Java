@@ -3,8 +3,10 @@ package lab3;
 import java.awt.Color;
 import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -17,6 +19,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import java.lang.Object; 
 import java.util.Random;
@@ -26,11 +30,13 @@ import java.util.Random;
 public class FormWharf {
 
 	private JFrame frame;
-	private JPanel panel;
+	private JList listBoxLevels;
+    private DefaultListModel model;
 	
 	
 	private JTextField maskedTextBox1;
-    Wharf<ITransport> wharf;
+	MultiLevelWharf wharf;
+	private int countLevel = 5;
     private PanelShip pictureBoxTakeShip;
     private PanelWharf panelWharf;
 	/**
@@ -64,8 +70,9 @@ public class FormWharf {
 		frame.setBounds(100, 100, 938, 503);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
 		panelWharf= new PanelWharf();
-		panelWharf.setBounds(10, 11, 768, 432);
+		panelWharf.setBounds(0, 11, 777, 443);
 		frame.getContentPane().add(panelWharf);
 		
 		wharf = panelWharf.getWharf();
@@ -79,13 +86,11 @@ public class FormWharf {
 			public void actionPerformed(ActionEvent arg0) {
 				Color mainColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
 				SimpleShip ship = new SimpleShip(100, 1000, mainColor);
-				int place = wharf.Plus(ship);
-				PanelShip.initialization = true;
-				//RedrawUI();
+				int place = wharf.getWharf(listBoxLevels.getSelectedIndex()).Plus(ship);
 				panelWharf.repaint();
 			}
 		});
-		buttonSetSimpleShip.setBounds(790, 13, 118, 78);
+		buttonSetSimpleShip.setBounds(790, 141,  118, 41);
 		frame.getContentPane().add(buttonSetSimpleShip);
 		
 		JButton buttonSetShip = new JButton("Припарковать корабль-контейнеровоз");
@@ -93,17 +98,12 @@ public class FormWharf {
 			public void actionPerformed(ActionEvent e) {
 				Color mainColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
 				Color dopColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
-
 				Ship ship = new Ship(100, 1000, mainColor, dopColor);
-                int place = wharf.Plus(ship);
-				PanelShip.initialization = true;
-               // Draw();
-				RedrawUI();
+				int place = wharf.getWharf(listBoxLevels.getSelectedIndex()).Plus(ship);					
 				panelWharf.repaint();
-
 			}
 		});
-		buttonSetShip.setBounds(790, 104, 118, 78);
+		buttonSetShip.setBounds(790, 182, 118, 41);
 		frame.getContentPane().add(buttonSetShip);
 		
 		JPanel panel = new JPanel();
@@ -132,7 +132,7 @@ public class FormWharf {
 		buttonTakeShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!maskedTextBox1.getText().equals("")) {
-                    ITransport ship = wharf.Minus(Integer.parseInt(maskedTextBox1.getText()));
+					ITransport ship = wharf.getWharf(listBoxLevels.getSelectedIndex()).Minus(Integer.parseInt(maskedTextBox1.getText()));
                     if (ship != null) {
                         ship.SetPosition(5, 5, pictureBoxTakeShip.getWidth(), pictureBoxTakeShip.getHeight());
                         pictureBoxTakeShip.setShip(ship);
@@ -147,6 +147,25 @@ public class FormWharf {
 		});
 		buttonTakeShip.setBounds(22, 64, 97, 25);
 		panel.add(buttonTakeShip);
+		
+		listBoxLevels = new JList();
+		listBoxLevels.setBounds(790, 11, 118, 118);
+		frame.getContentPane().add(listBoxLevels);
+        model = new DefaultListModel();
+        for(int i = 0; i < countLevel; i++)
+        {
+        	model.addElement("Уровень " + (i + 1));
+        }
+        listBoxLevels.setModel(model);
+        listBoxLevels.setSelectedIndex(0);
+        panelWharf.setListLevels(listBoxLevels);   
+        listBoxLevels.addListSelectionListener(new ListSelectionListener() { 
+			@Override 
+			public void valueChanged(ListSelectionEvent e) { 
+				panelWharf.repaint(); 
+			} 
+		});
+	
 	}
 	private void RedrawUI() {
 		panelWharf.updateUI();		
