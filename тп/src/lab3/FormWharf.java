@@ -87,6 +87,7 @@ public class FormWharf {
 				Color mainColor = JColorChooser.showDialog(null, "Choose a color", Color.GRAY);
 				SimpleShip ship = new SimpleShip(100, 1000, mainColor);
 				int place = wharf.getWharf(listBoxLevels.getSelectedIndex()).Plus(ship);
+			
 				panelWharf.repaint();
 			}
 		});
@@ -141,7 +142,6 @@ public class FormWharf {
                     } else {
                     	pictureBoxTakeShip.setShip(null);
                     	pictureBoxTakeShip.repaint();
-                    }
 				}
 			}
 		});

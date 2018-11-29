@@ -10,7 +10,6 @@ public class PanelWharf extends JPanel{
 	private  MultiLevelWharf wharf;
 	private JList listBoxLevels;
 	private final int countLevel = 5;
-	
 	public MultiLevelWharf getWharf() {
         return wharf;
 	}
