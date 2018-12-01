@@ -93,7 +93,7 @@ import java.util.HashMap;
             {  
                 g.drawRect(i * _placeSizeWidth, j * _placeSizeHeight, 110, 5 );
                 Color nc = new Color(200,200,200);
-        		g.setColor(nc);
+        	g.setColor(nc);
                 g.fillRect(i * _placeSizeWidth, j * _placeSizeHeight, 110, 5);
             }
     		g.setColor(newColor3);

@@ -86,6 +86,7 @@ public class FormWharf {
 		JButton buttonSetTractor = new JButton("Заказать корабль");
 		buttonSetTractor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
 				if (listBoxLevels.getSelectedIndex() > -1) {
                     DialogConfig dConfig = new DialogConfig(frame);
                     if (dConfig.isSuccessful()) {
@@ -135,7 +136,6 @@ public class FormWharf {
                     } else {
                     	pictureBoxTakeShip.setShip(null);
                     	pictureBoxTakeShip.repaint();
-                    }
 				}
 			}
 		});
