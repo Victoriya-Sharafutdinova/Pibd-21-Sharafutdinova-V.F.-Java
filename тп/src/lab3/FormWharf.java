@@ -5,8 +5,13 @@ import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -21,7 +26,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.io.File;
 import java.lang.Object; 
 import java.util.Random;
 
@@ -72,6 +79,56 @@ public class FormWharf {
 		frame.setBounds(100, 100, 938, 503);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+
+		JMenu menuFile = new JMenu("File");
+		menuBar.add(menuFile);
+
+		JMenuItem menuSave = new JMenuItem("Save");
+		menuSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser filesave = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("txt file", "txt");
+				filesave.setFileFilter(filter);
+				if (filesave.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = filesave.getSelectedFile();
+					String path = file.getAbsolutePath();
+					if (wharf.saveData(path)) {
+						JOptionPane.showMessageDialog(null, "Saved");
+						return;
+					} else {
+						JOptionPane.showMessageDialog(null, "Save failed", "", 0, null);
+					}
+				}
+			}
+		});
+		menuFile.add(menuSave);
+
+		JMenuItem menuLoad = new JMenuItem("Load");
+		menuLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileChooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("txt file", "txt");
+				fileChooser.setFileFilter(filter);
+				if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+					try {
+						if (wharf.loadData(file.getAbsolutePath())) {
+							JOptionPane.showMessageDialog(null, "Loaded");
+						} else {
+							JOptionPane.showMessageDialog(null, "Load failed", "", 0, null);
+						}
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, ex.getMessage(), "", 0, null);
+					}
+					panelWharf.repaint();
+				}
+			}
+		});
+		menuFile.add(menuLoad);
+
 		
 		panelWharf= new PanelWharf();
 		panelWharf.setBounds(0, 11, 777, 443);

@@ -6,6 +6,8 @@ import java.awt.Polygon;
 
 public class Ship extends SimpleShip{	
 	
+	
+
 	private Color dopColor;
     public Color getDopColor() {
     	return dopColor;
@@ -21,8 +23,8 @@ public class Ship extends SimpleShip{
             case "blue":
             	dopColor = Color.BLUE;
                 break;
-            case "red":
-            	dopColor = Color.RED;
+            case "magenta":
+            	dopColor = Color.MAGENTA;
                 break;
             case "green":
             	dopColor = Color.GREEN;
@@ -33,22 +35,33 @@ public class Ship extends SimpleShip{
             case "orange":
             	dopColor = Color.ORANGE;
                 break;
-            case "grey":
-            	dopColor = Color.GRAY;
+            case "pink":
+            	dopColor = Color.PINK;
                 break;
-            case "white":
-            	dopColor = Color.WHITE;
+            case "cyan":
+            	dopColor = Color.CYAN;
                 break;
         }
 
     }
     
-	public Ship(int maxSpeed, int weight, Color mainColor, Color dopColor) 
-    {      
-		super(maxSpeed, weight, mainColor);
-        setDopColor(dopColor);
+    public Ship(int maxSpeed, int weight, Color mainColor, Color dopColor)
+    {
+    	super(maxSpeed, weight, mainColor);
+		setDopColor(dopColor);
     }
-
+    
+    public Ship(String info) {
+    	super(info);
+		String[] str = info.split(";");
+		if(str.length == 8) {
+			MaxSpeed = Integer.parseInt(str[0]);
+			Weight = Float.parseFloat(str[1]);
+			mainColor = new Color(Integer.parseInt(str[2]), Integer.parseInt(str[3]), Integer.parseInt(str[4]));
+			dopColor = new Color(Integer.parseInt(str[5]), Integer.parseInt(str[6]), Integer.parseInt(str[7]));
+		}
+	}
+	
 	public void DrawShip(Graphics g) {
 		super.DrawShip(g);
 		g.setColor(mainColor);
@@ -84,5 +97,12 @@ public class Ship extends SimpleShip{
 		Polygon poly = new Polygon(arrayX, arrayY, 4);
 		g.fillPolygon(poly);
 		g.drawPolygon(poly);
+	}
+	@Override
+	public String getInfo() {
+		return MaxSpeed + ";" + Weight + ";" + mainColor.getRed() + ";" 
+				+ mainColor.getGreen() + ";" +  mainColor.getBlue() + ";" 
+				+ dopColor.getRed() + ";" + dopColor.getGreen() + ";" 
+				+ dopColor.getBlue();
 	}
 }
