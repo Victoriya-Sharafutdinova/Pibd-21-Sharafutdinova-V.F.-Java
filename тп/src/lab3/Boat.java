@@ -70,4 +70,6 @@ import java.awt.Graphics;
     public abstract void DrawShip(Graphics g);
 
     public abstract void MoveTransport(Direction direction);
+    
+    public abstract String getInfo();
 }

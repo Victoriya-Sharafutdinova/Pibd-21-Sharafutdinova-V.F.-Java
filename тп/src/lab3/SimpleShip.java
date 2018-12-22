@@ -13,7 +13,16 @@ public class SimpleShip extends Boat{
         setWeight(weight);
         setMainColor(mainColor);
     }
-   
+    
+    public SimpleShip(String info) {
+		String[] str = info.split(";");
+		if(str.length == 5) {
+			MaxSpeed = Integer.parseInt(str[0]);
+			Weight = Float.parseFloat(str[1]);
+			mainColor = new Color(Integer.parseInt(str[2]), Integer.parseInt(str[3]), Integer.parseInt(str[4]));
+		}
+	}
+
     public  void MoveTransport(Direction direction)
     {
         float step = MaxSpeed * 100 / Weight;
@@ -61,4 +70,9 @@ public class SimpleShip extends Boat{
 		g.fillRect((int) _startPosX + 70, (int) _startPosY - 10, 15, 30);
 		g.drawRect((int) _startPosX + 70, (int) _startPosY - 10, 15, 30);
     }
+    @Override
+	public String getInfo() {
+		return MaxSpeed + ";" + Weight + ";"  + mainColor.getRed() + ";" 
+				+ mainColor.getGreen() + ";" + mainColor.getBlue();
+	}
 }
