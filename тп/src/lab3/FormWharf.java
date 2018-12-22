@@ -29,8 +29,12 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.Object; 
 import java.util.Random;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 
 
@@ -48,6 +52,9 @@ public class FormWharf {
 	private int countLevel = 5;
     private PanelShip pictureBoxTakeShip;
     private PanelWharf panelWharf;
+    
+    FileHandler fh;
+	private static Logger logger= Logger.getLogger(FormWharf.class.getName());
 	/**
 	 * Launch the application.
 	 */
@@ -80,6 +87,18 @@ public class FormWharf {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		try {
+			fh = new FileHandler("D:/logger.txt");
+			logger.addHandler(fh);
+			SimpleFormatter formatter = new SimpleFormatter();
+			fh.setFormatter(formatter);
+		} catch (SecurityException ex){
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 
@@ -95,10 +114,12 @@ public class FormWharf {
 				if (filesave.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = filesave.getSelectedFile();
 					String path = file.getAbsolutePath();
-					if (wharf.saveData(path)) {
+					try{
+						wharf.saveData(path);
 						JOptionPane.showMessageDialog(null, "Saved");
-						return;
-					} else {
+						logger.info("Сохранено в файл " + file.getName());
+					}
+					catch(Exception ex){
 						JOptionPane.showMessageDialog(null, "Save failed", "", 0, null);
 					}
 				}
@@ -115,14 +136,16 @@ public class FormWharf {
 				if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					try {
-						if (wharf.loadData(file.getAbsolutePath())) {
-							JOptionPane.showMessageDialog(null, "Loaded");
-						} else {
-							JOptionPane.showMessageDialog(null, "Load failed", "", 0, null);
-						}
+						wharf.loadData(file.getAbsolutePath());
+						JOptionPane.showMessageDialog(null, "Loaded");
+						logger.info("Загружено из файла " + file.getName());					
+					} catch (WharfOccupiedPlaceException ex) {
+						JOptionPane.showMessageDialog(null, "Занято место", ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+
 					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, ex.getMessage(), "", 0, null);
+						JOptionPane.showMessageDialog(null, ex.getMessage(), "Load failed", 0, null);
 					}
+					
 					panelWharf.repaint();
 				}
 			}
@@ -140,21 +163,28 @@ public class FormWharf {
 		pictureBoxWharf.setBounds(0, 0, 778, 466);
 		frame.getContentPane().add(pictureBoxWharf);
 		
-		JButton buttonSetTractor = new JButton("Заказать корабль");
-		buttonSetTractor.addActionListener(new ActionListener() {
+		JButton buttonSetShip = new JButton("Заказать корабль");
+		buttonSetShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (listBoxLevels.getSelectedIndex() > -1) {
-                    DialogConfig dConfig = new DialogConfig(frame);
-                    if (dConfig.isSuccessful()) {
-                    	PanelTakeWharf.ship = dConfig.getShip();
-                        int i = wharf.getWharf(listBoxLevels.getSelectedIndex()).Plus(PanelTakeWharf.ship);
-                        panelWharf.repaint();
-                    }
+					try{
+						DialogConfig dConfig = new DialogConfig(frame);
+	                    if (dConfig.isSuccessful()) {
+	                    	PanelTakeWharf.ship = dConfig.getShip();
+	                        int i = wharf.getWharf(listBoxLevels.getSelectedIndex()).Plus(PanelTakeWharf.ship);
+	                        logger.info("Добавлен корабль " + PanelTakeWharf.ship.getInfo() + " на место " + i);
+	                        panelWharf.repaint();
+	                    }
+					}catch(WharfOverflowException ex) {
+						JOptionPane.showMessageDialog(null, ex.getMessage(), "Переполнение", JOptionPane.ERROR_MESSAGE);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, ex.getMessage(), "Неизвестная ошибка", JOptionPane.ERROR_MESSAGE);
+					} 
                 }
 			}
 		});
-		buttonSetTractor.setBounds(790, 141,  118, 41);
-		frame.getContentPane().add(buttonSetTractor);
+		buttonSetShip.setBounds(790, 141,  118, 41);
+		frame.getContentPane().add(buttonSetShip);
 		
 
 		JPanel panel = new JPanel();
@@ -183,16 +213,17 @@ public class FormWharf {
 		buttonTakeShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!maskedTextBox1.getText().equals("")) {
-					ITransport ship = wharf.getWharf(listBoxLevels.getSelectedIndex()).Minus(Integer.parseInt(maskedTextBox1.getText()));
-                    if (ship != null) {
-                        ship.SetPosition(5, 5, pictureBoxTakeShip.getWidth(), pictureBoxTakeShip.getHeight());
+					try{
+						ITransport ship = wharf.getWharf(listBoxLevels.getSelectedIndex()).Minus(Integer.parseInt(maskedTextBox1.getText()));
+						ship.SetPosition(5, 5, pictureBoxTakeShip.getWidth(), pictureBoxTakeShip.getHeight());
                         pictureBoxTakeShip.setShip(ship);
                         pictureBoxTakeShip.repaint();
                         panelWharf.repaint();
-                    } else {
-                    	pictureBoxTakeShip.setShip(null);
-                    	pictureBoxTakeShip.repaint();
+                        logger.info("Изъят корабль " + ship.getInfo() + " с места " + maskedTextBox1.getText());
+                    } catch(WharfNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Не найдено", JOptionPane.ERROR_MESSAGE);
                     }
+					panelWharf.repaint();
 				}
 			}
 		});

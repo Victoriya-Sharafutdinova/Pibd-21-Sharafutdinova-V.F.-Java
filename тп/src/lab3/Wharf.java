@@ -36,11 +36,12 @@ import java.util.HashMap;
         PictureHeight = pictureHeight;
         
     }
-    public int Plus(T ship)
+    public int Plus(T ship) throws WharfOverflowException
     {
     	if (_places.size() == _maxCount)
         {
-            return -1;
+    		 throw new WharfOverflowException();
+
         }
         for (int i = 0; i < _maxCount;  i++)
         {
@@ -54,7 +55,7 @@ import java.util.HashMap;
         return -1;
     }
 
-    public  T Minus( int index)
+    public  T Minus( int index)throws WharfNotFoundException
     {
         if (index < 0 || index > _maxCount)
         {
@@ -66,7 +67,7 @@ import java.util.HashMap;
             _places.remove(index);
             return ship;
         }
-        return null;
+        throw new WharfNotFoundException(index);
     }
 
     private boolean CheckFreePlace(int index)
@@ -100,17 +101,18 @@ import java.util.HashMap;
             g.drawLine( i * _placeSizeWidth, 0, i * _placeSizeWidth, 400);
         }
     }
-    public T getShip(int index) {
+    public T getShip(int index)  throws  WharfNotFoundException{
     	if (_places.get(index) != null) {
 			return _places.get(index);
-		} else {
-			return null;
-		}
+		}  throw new WharfNotFoundException(index);
     }
-    public void setShip(int index, T ship) {
+    public void setShip(int index, T ship) throws WharfOccupiedPlaceException{
     	if(CheckFreePlace(index)) {
     		_places.put(index, ship);
     		_places.get(index).SetPosition(5 + index / 5 * _placeSizeWidth + 5, index % 5 * _placeSizeHeight + 15, PictureWidth, PictureHeight);
+    	}
+    	else{
+    		throw new WharfOccupiedPlaceException(index);
     	}
     }
  }
