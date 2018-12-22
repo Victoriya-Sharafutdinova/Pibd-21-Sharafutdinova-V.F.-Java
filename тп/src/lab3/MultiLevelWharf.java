@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -41,7 +42,7 @@ public class MultiLevelWharf {
         }
         return null;
     }
-    public boolean saveData(String filename) {
+    public void saveData(String filename) {
         File file = new File(filename);
         if (file.exists()) {
             file.delete();
@@ -51,8 +52,8 @@ public class MultiLevelWharf {
             for (Wharf<ITransport> level : parkingStages) {
                 writeToFile("Level" + System.lineSeparator(), bw);
                 for (int i = 0; i < countPlaces; i++) {
-                    ITransport ship = level.getShip(i);
-                    if (ship != null) {
+                	try{
+                		ITransport ship = level.getShip(i);                     
                         if (ship.getClass().getSimpleName().equals("SimpleShip")) {
                             writeToFile(i + ":SimpleShip:" + ship.getInfo(), bw);
                         }
@@ -60,13 +61,14 @@ public class MultiLevelWharf {
                             writeToFile(i + ":Ship:" + ship.getInfo(), bw);
                         }
                         writeToFile(System.lineSeparator(), bw);
-                    }
+                	}catch(Exception ex){ }
+                	finally { }
+
                 }
             }
-            return true;
+            
         } catch (Exception ex) {
             System.out.println(ex);
-            return false;
         }
  }
  
@@ -79,10 +81,10 @@ public class MultiLevelWharf {
         }
   }
  
- public boolean loadData(String filename) {
+ public void loadData(String filename) throws Exception{
         File file = new File(filename);
         if (!file.exists()) {
-            return false;
+        	 throw new FileNotFoundException();
         }
         String bufferTextFromFile = "";
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -98,7 +100,7 @@ public class MultiLevelWharf {
                 }
                 parkingStages = new ArrayList<Wharf<ITransport>>(count);
             } else {
-                return false;
+            	throw new Exception("Неверный формат файла");
             }
             int counter = -1;
             ITransport ship = null;
@@ -118,11 +120,8 @@ public class MultiLevelWharf {
                 }
                 parkingStages.get(counter).setShip(Integer.parseInt(strs[i].split(":")[0]), ship);
             }
-            return true;
         } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
+            throw e;        }
     }
 
 }
