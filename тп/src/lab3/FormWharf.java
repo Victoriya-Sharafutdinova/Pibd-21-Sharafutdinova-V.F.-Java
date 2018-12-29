@@ -186,7 +186,21 @@ public class FormWharf {
 		buttonSetShip.setBounds(790, 141,  118, 41);
 		frame.getContentPane().add(buttonSetShip);
 		
-
+		//buttonSetShip.setBounds(720, 290,  150, 50);
+	//	frame.getContentPane().add(buttonSetShip);
+		
+		
+		JButton buttonSort = new JButton("Сортировать");
+		buttonSort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				wharf.sort();
+				panelWharf.repaint();
+				logger.info("Отсортировано");
+			}
+		});
+		buttonSort.setBounds(790, 181,  118, 41);
+		frame.getContentPane().add(buttonSort);
+		
 		JPanel panel = new JPanel();
 		panel.setBounds(779, 226, 141, 230);
 		frame.getContentPane().add(panel);

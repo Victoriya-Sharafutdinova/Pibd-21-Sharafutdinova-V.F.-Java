@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
-public class SimpleShip extends Boat{
+public class SimpleShip extends Boat implements Comparable<SimpleShip>{
 	protected  int shipWidth = 100;
     protected  int shipHeight = 60;
     public SimpleShip(int maxSpeed, int weight, Color mainColor)
@@ -75,4 +75,55 @@ public class SimpleShip extends Boat{
 		return MaxSpeed + ";" + Weight + ";"  + mainColor.getRed() + ";" 
 				+ mainColor.getGreen() + ";" + mainColor.getBlue();
 	}
+    @Override
+	public int compareTo(SimpleShip other) {
+		if(other == null) {
+			return 1;
+		}
+		if(MaxSpeed != other.MaxSpeed) {
+			return Integer.compare(MaxSpeed, other.MaxSpeed);
+		}
+		if(Weight != other.Weight) {
+			return Float.compare(Weight, other.Weight);
+		}
+		if(mainColor != other.mainColor) {
+			return Integer.compare(mainColor.getRGB(), other.mainColor.getRGB());
+		}
+		return 0;
+	}
+	
+	public boolean equals(SimpleShip other) {
+		if(other == null) {
+			return false;
+		}
+		if(MaxSpeed != other.MaxSpeed) {
+			return false;
+		}
+		if(Weight != other.Weight) {
+			return false;
+		}
+		if(mainColor != other.mainColor) {
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other == null) {
+			return false;
+		}
+		if(!(other instanceof SimpleShip)) {
+			return false;
+		}
+		SimpleShip shipObj = (SimpleShip) other;
+		return equals(shipObj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+    
 }

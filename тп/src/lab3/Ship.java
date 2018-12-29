@@ -105,4 +105,59 @@ public class Ship extends SimpleShip{
 				+ dopColor.getRed() + ";" + dopColor.getGreen() + ";" 
 				+ dopColor.getBlue();
 	}
+	public int compareTo(Ship other) {
+		if(other == null) {
+			return 1;
+		}
+		if(MaxSpeed != other.MaxSpeed) {
+			return Integer.compare(MaxSpeed, other.MaxSpeed);
+		}
+		if(Weight != other.Weight) {
+			return Float.compare(Weight, other.Weight);
+		}
+		if(mainColor != other.mainColor) {
+			return Integer.compare(mainColor.getRGB(), other.mainColor.getRGB());
+		}
+		if(dopColor != other.dopColor) {
+			return Integer.compare(dopColor.getRGB(), other.dopColor.getRGB());		
+		}
+		return 0;
+	}
+	
+	public boolean equals(Ship other) {
+		if(other == null) {
+			return false;
+		}
+		if(MaxSpeed != other.MaxSpeed) {
+			return false;
+		}
+		if(Weight != other.Weight) {
+			return false;
+		}
+		if(mainColor != other.mainColor) {
+			return false;
+		}
+		if(dopColor != other.dopColor) {
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other == null) {
+			return false;
+		}
+		if(!(other instanceof Ship)) {
+			return false;
+		}
+		Ship shipObj = (Ship) other;
+		return equals(shipObj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 }

@@ -5,8 +5,9 @@ import java.awt.Graphics;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
- class Wharf<T extends ITransport > {
+ class Wharf<T extends ITransport > implements Iterable<T>, Comparable<Wharf<T>>{
     private HashMap<Integer,T> _places;
     private int _maxCount;
     private int PictureWidth;
@@ -36,13 +37,17 @@ import java.util.HashMap;
         PictureHeight = pictureHeight;
         
     }
-    public int Plus(T ship) throws WharfOverflowException
+    public int Plus(T ship) throws WharfOverflowException, WharfAlreadyHaveException
     {
     	if (_places.size() == _maxCount)
         {
     		 throw new WharfOverflowException();
 
         }
+    	if(_places.containsValue(ship)) {
+    		throw new WharfAlreadyHaveException();
+    	}
+
         for (int i = 0; i < _maxCount;  i++)
         {
             if (CheckFreePlace(i))
@@ -114,5 +119,36 @@ import java.util.HashMap;
     	else{
     		throw new WharfOccupiedPlaceException(index);
     	}
+    }
+    @Override
+    public Iterator<T> iterator(){
+    	return _places.values().iterator();
+    }
+    
+    @Override
+    public int compareTo(Wharf<T> other) {
+    	if(_places.size() > other._places.size()){
+            return -1;
+        } else if(_places.size() < other._places.size()){
+            return 1;
+        } else if(_places.size() > 0){
+            Object[] thisKey = _places.keySet().toArray();
+            Object[] otherKey = other._places.keySet().toArray();
+            for(int i = 0; i < _places.size(); ++i){
+                if(_places.get(thisKey[i]) instanceof SimpleShip && other._places.get(otherKey[i]) instanceof Ship){
+                    return 1;
+                }
+                if(_places.get(thisKey[i]) instanceof Ship && other._places.get(otherKey[i]) instanceof SimpleShip){
+                    return -1;
+                }
+                if(_places.get(thisKey[i]) instanceof SimpleShip && other._places.get(otherKey[i]) instanceof SimpleShip){
+                    return (((SimpleShip) _places.get(thisKey[i])).compareTo((SimpleShip) other._places.get(thisKey[i])));
+                }
+                if(_places.get(thisKey[i]) instanceof Ship && other._places.get(otherKey[i]) instanceof Ship){
+                    return (((Ship) _places.get(thisKey[i])).compareTo((Ship) other._places.get(thisKey[i])));
+                }
+            }
+        }
+        return 0;
     }
  }
