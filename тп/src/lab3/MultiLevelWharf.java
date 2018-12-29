@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MultiLevelWharf {
 	ArrayList<Wharf<ITransport>> parkingStages;
@@ -121,7 +122,11 @@ public class MultiLevelWharf {
                 parkingStages.get(counter).setShip(Integer.parseInt(strs[i].split(":")[0]), ship);
             }
         } catch (Exception e) {
-            throw e;        }
+            throw e;        
+        }
     }
+ 	public void sort() {
+		Collections.sort(parkingStages);
+	}
 
 }
